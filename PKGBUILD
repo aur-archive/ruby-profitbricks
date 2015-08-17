@@ -1,0 +1,23 @@
+# Maintainer: Jochen Schalanda <jochen+aur@schalanda.name>
+_gemname=profitbricks
+pkgname=ruby-$_gemname
+pkgver=1.1.1
+pkgrel=1
+pkgdesc='A Ruby client for the ProfitBricks API.'
+arch=(any)
+url='http://github.com/dsander/profitbricks'
+license=('MIT')
+depends=('ruby' 'ruby-savon-2.2')
+source=(https://rubygems.org/downloads/$_gemname-$pkgver.gem)
+noextract=($_gemname-$pkgver.gem)
+
+package() {
+  cd "$srcdir"
+  # _gemdir is defined inside package() because if ruby[gems] is not installed on
+  # the system, makepkg will exit with an error when sourcing the PKGBUILD.
+  local _gemdir="$(ruby -rubygems -e'puts Gem.default_dir')"
+
+  gem install --no-user-install --ignore-dependencies -i "$pkgdir$_gemdir" \
+    -n "$pkgdir/usr/bin" "$_gemname-$pkgver.gem"
+}
+md5sums=('59c44b41d6dd1e6db93648eab4faeff9')
